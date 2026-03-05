@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--
+        ================================================================
+        VISTA 1: sale_stock_client_order_ref.view_order_form_client_order_ref
+        ================================================================
+        Agrega project_id debajo de client_order_ref.
+        ================================================================
+        -->
+        <record id="view_order_form_client_order_ref_project" model="ir.ui.view">
+            <field name="name">sale.order.form.client.order.ref.project</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_stock_client_order_ref.view_order_form_client_order_ref"/>
+            <field name="priority">20</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='client_order_ref']" position="after">
+                    <field name="project_id"
+                           string="Proyecto"
+                           groups="project.group_project_user"
+                           context="{'default_allow_billable': True}"
+                           options="{'no_create': True}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!--
+        ================================================================
+        VISTA 2: sale_project.view_order_form_inherit_sale_project
+        ================================================================
+        Oculta el project_id original para evitar que aparezca duplicado,
+        ya que ahora se muestra en la nueva posición (Vista 1).
+        ================================================================
+        -->
+        <record id="view_order_form_inherit_sale_project_hide" model="ir.ui.view">
+            <field name="name">sale.order.form.inherit.sale.project.hide</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_project.view_order_form_inherit_sale_project"/>
+            <field name="priority">20</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='project_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
